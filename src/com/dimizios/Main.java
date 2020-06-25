@@ -1,4 +1,4 @@
-package com.dimizios;
+package com.dimizzi;
 
 public class Main {
 
