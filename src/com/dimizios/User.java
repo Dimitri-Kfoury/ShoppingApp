@@ -6,6 +6,7 @@ public class User {
 
     private String username;
     private  Map userProfileVector;
+    private int userId;
 
 
 }
