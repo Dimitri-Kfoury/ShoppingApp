@@ -1,4 +1,4 @@
-package com.dimizzi;
+package com.dimizios;
 
 import java.util.HashMap;
 import java.util.Map;
