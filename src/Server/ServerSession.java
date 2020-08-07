@@ -6,6 +6,8 @@ import java.net.Socket;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import com.dimizios.*;
 
 public class ServerSession extends Thread {
@@ -34,29 +36,25 @@ public class ServerSession extends Thread {
 
             while (!socket.isClosed()) {
 
-                Object data;
+                Object command;
 
-                data = inputStream.readObject();
+                command = inputStream.readObject();
 
-                if (data instanceof String) {
+                if (command instanceof String) {
 
-                    String[] dataArray = ((String) data).split(",");
-
-
-                    switch (dataArray[0]) {
+                    switch ((String) command) {
 
                         case "login": {
 
-                            //boolean loginSuccess = DataBaseOperations.getInstance().login();
-
-                         //   outputStream.writeObject(loginSuccess);
+                            boolean loginSuccess = DataBaseOperations.getInstance().login();
+                            outputStream.writeObject(loginSuccess);
                             break;
                         }
 
                         case "create": {
 
                             //boolean createAccountSuccess = DataBaseOperations.getInstance().createAccount();
-                          //  outputStream.writeObject(createAccountSuccess);
+                            //  outputStream.writeObject(createAccountSuccess);
 
                             break;
                         }
@@ -64,22 +62,23 @@ public class ServerSession extends Thread {
                             //boolean updatePersonalInfoSuccess = DataBaseOperations.getInstance().edit();
 
                             //outputStream.writeObject(updatePersonalInfoSuccess);
-                           // break;
+                            // break;
                         }
                         case "searchProducts": {
 
                             //ArrayList<Product> products = (ArrayList<Product>) DataBaseOperations.getInstance().searchProducts();
-                          //  outputStream.writeObject(products);
+                            //  outputStream.writeObject(products);
                             break;
                         }
                         case "showHistory": {
-                           // ArrayList<PurchaseHistoryEntry> purchaseHistoryEntries = DataBaseOperations.getInstance().getPurchaseHistory();
-                           // outputStream.writeObject(purchaseHistoryEntries);
+                            // ArrayList<PurchaseHistoryEntry> purchaseHistoryEntries = DataBaseOperations.getInstance().getPurchaseHistory();
+                            // outputStream.writeObject(purchaseHistoryEntries);
                             break;
                         }
-                        case "purchase":{
-                           // boolean purchaseSuccess = DataBaseOperations.getInstance().buy();
-                           // outputStream.writeObject(purchaseSuccess);
+                        case "purchase": {
+
+                            boolean purchaseSuccess = DataBaseOperations.getInstance().buy((String) username, (List<CartEntry>) cart);
+                            // outputStream.writeObject(purchaseSuccess);
                             break;
                         }
                     }
@@ -90,6 +89,25 @@ public class ServerSession extends Thread {
         }
     }
 
+    private String[] getData() {
+
+        Object data = null;
+
+        try {
+
+            data = this.inputStream.readObject();
+            ;
+            assert data instanceof String;
+            return ((String) data).split(",");
+
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 
     public void closeConnection() {
         try {
