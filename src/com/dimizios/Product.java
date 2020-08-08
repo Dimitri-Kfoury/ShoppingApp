@@ -8,14 +8,16 @@ import java.util.Set;
 public class Product {
 
 
-    public Product(){}
+    public Product() {
+    }
 
     private String productId;
+    private String productName;
 
 
-
-    public Product(String productId) {
+    public Product(String productId, String productName) {
         this.productId = productId;
+        this.productName = productName;
 
     }
 
@@ -24,5 +26,7 @@ public class Product {
         return productId;
     }
 
-
+    public String getProductName() {
+        return productName;
+    }
 }

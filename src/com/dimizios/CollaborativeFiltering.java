@@ -1,8 +1,11 @@
+/*
 package com.dimizios;
 
+*/
 /**
  * Collaborative filtering is a class that implements tools that are used in recommending products using a utility matrix.
- */
+ *//*
+
 
 
 import com.opencsv.CSVParser;
@@ -37,13 +40,15 @@ public class CollaborativeFiltering {
         printSringValues(line1);
 
     }
-        /**
+        */
+/**
          * Method that finds n similar users(or rows) to a target user(or row).
          *
          * @param n      is the number of similar users to find.
          * @param userId is the id of the target user.
          * @return a set of the n most similar neighbors
-         */
+         *//*
+
         private static TreeSet<Neighbor> findSimilarUsers ( int n, int userId){
 
             TreeSet<Neighbor> neighborhood = new TreeSet<>();
@@ -107,12 +112,14 @@ public class CollaborativeFiltering {
             return neighborhood;
         }
 
-        /**
+        */
+/**
          * Returns an array of normalized ratings given an array of ratings(as Strings)
          *
          * @param Datarow is the array containing the ratings
          * @return an array of normalized ratings
-         */
+         *//*
+
         private static double[] normalizeRatings (String[]Datarow){
 
             double[] normalizedRatings = new double[Datarow.length - 1]; // array holding normalized values of ratings as "double" values.
@@ -145,13 +152,15 @@ public class CollaborativeFiltering {
 
         }
 
-        /**
+        */
+/**
          * CosineDistance calculates the cosine distance of two vectors (represented by arrays of double values).
          *
          * @param vector1 is the first vector.
          * @param vector2 is the second vector.
          * @return cosineDistance , the cosine distance between vector1 and vector2.
-         */
+         *//*
+
         private static double cosineDistance ( double[] vector1, double[] vector2) throws IllegalArgumentException {
 
             double cosineDistance = 0; // cosine distance between vector1 and vector2
@@ -176,29 +185,35 @@ public class CollaborativeFiltering {
 
         }
 
-        /**
+        */
+/**
          * Class that represents a user or item as neighbor of another user or item.
-         */
+         *//*
+
         private static class Neighbor implements Comparable {
 
             private int id; // id of user or item
             private double similarity; // similarity score
 
-            /**
+            */
+/**
              * Constructor for the Neighbor class.
              *
              * @param id         is the id of the user or item
              * @param similarity is its similarity score
-             */
+             *//*
+
 
             public Neighbor(int id, double similarity) {
                 this.id = id;
                 this.similarity = similarity;
             }
 
-            /**
+            */
+/**
              * Natural ordering method of the neighbor class
-             */
+             *//*
+
             @Override
             public int compareTo(Object o) {
                 if (o instanceof Neighbor) {
@@ -219,10 +234,12 @@ public class CollaborativeFiltering {
 
         }
 
-        /**
+        */
+/**
          * Delete this method
          * Prints the contents of an array of doubles
-         */
+         *//*
+
         public static void printValues ( double[] values){
 
             StringBuilder sb = new StringBuilder();
@@ -235,10 +252,12 @@ public class CollaborativeFiltering {
             System.out.println(sb);
         }
 
-        /**
+        */
+/**
          * Delete this method
          * Prints the contents of an array of Strings
-         */
+         *//*
+
         public static void printSringValues (String[]values){
 
             StringBuilder sb = new StringBuilder();
@@ -252,3 +271,4 @@ public class CollaborativeFiltering {
             System.out.println(sb);
         }
     }
+*/
