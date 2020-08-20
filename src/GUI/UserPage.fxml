@@ -5,105 +5,120 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" side="LEFT"
-         style="-fx-background-color: #FFFFFF;" tabClosingPolicy="UNAVAILABLE"
-         xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="GUI.UserPage" fx:id="tabPane">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" side="LEFT" style="-fx-background-color: #FFFFFF;" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.UserPage">
     <tabs>
         <Tab text="Search">
             <content>
                 <HBox>
                     <children>
-                        <VBox fx:id="leftSearchVbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-                              maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                              spacing="10.0" style="-fx-border-color: #000000;fx-border-width: 10;">
+                        <VBox fx:id="leftSearchVbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" style="-fx-border-color: #000000;fx-border-width: 10;">
                             <children>
-                                <TextField fx:id="bookInfoSearchField" maxHeight="-Infinity" maxWidth="-Infinity"
-                                           minHeight="-Infinity" minWidth="-Infinity" onAction="#productSearch"
-                                           text="Search">
+                                <TextField fx:id="productSearchField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#productSearch" text="Search">
                                     <VBox.margin>
-                                        <Insets top="10.0"/>
+                                        <Insets top="10.0" />
                                     </VBox.margin>
                                 </TextField>
-                                <ListView fx:id="productsListView" maxHeight="1.7976931348623157E308"
-                                          maxWidth="-Infinity" minHeight="${productsListView.prefHeight}"
-                                          minWidth="-Infinity" prefWidth="455.0" VBox.vgrow="ALWAYS">
+                                <ListView fx:id="productsListView" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="${productsListView.prefHeight}" minWidth="-Infinity" prefWidth="455.0" VBox.vgrow="ALWAYS">
                                 </ListView>
                             </children>
                             <HBox.margin>
-                                <Insets/>
+                                <Insets />
                             </HBox.margin>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-                              maxWidth="1.7976931348623157E308" prefHeight="${leftSearchVbox.prefHeight}" spacing="10.0"
-                              style="-fx-border-color: #000000;fx-border-width: 10;">
+                        <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="${leftSearchVbox.prefHeight}" spacing="10.0" style="-fx-border-color: #000000;fx-border-width: 10;">
                             <children>
-                                <ImageView fx:id="rightSideImage" fitHeight="300.0" fitWidth="300" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView fx:id="rightSideImage" fitHeight="300.0" fitWidth="300" pickOnBounds="true" preserveRatio="true">
                                 </ImageView>
-                                <TextArea prefHeight="200.0" prefWidth="200.0"/>
-                                <Button onAction="#addToCart" text="Add to cart"/>
+                                <TextArea prefHeight="200.0" prefWidth="200.0" />
+                                <VBox spacing="10.0">
+                                    <children>
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button onAction="#addToCart" text="Add to cart" />
+                                                <Label text="quantity: ">
+                                                    <HBox.margin>
+                                                        <Insets top="5.0" />
+                                                    </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="quantityField" prefHeight="25.0" prefWidth="35.0" />
+                                            </children>
+                                        </HBox>
+                                        <Label fx:id="addSuccessLabel" text="Item successfully added to cart" visible="false" />
+                                    </children>
+                                </VBox>
                             </children>
                             <padding>
-                                <Insets left="10.0" right="10.0"/>
+                                <Insets left="10.0" right="10.0" />
                             </padding>
                         </VBox>
                     </children>
                     <padding>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                     </padding>
                 </HBox>
             </content>
         </Tab>
-        <Tab text="Previous Purchases">
+        <Tab onSelectionChanged="#loadPurchaseHistory" text="Previous Purchases">
             <content>
-                <ListView fx:id="historyListView" maxWidth="-Infinity" minHeight="${productsListView.prefHeight}"
-                          minWidth="-Infinity" prefWidth="455.0"
-                          style="-fx-border-color: #000000;fx-border-width: 10;"/>
+                <ListView fx:id="historyListView" maxWidth="-Infinity" minHeight="${productsListView.prefHeight}" minWidth="-Infinity" prefWidth="455.0" style="-fx-border-color: #000000;fx-border-width: 10;" />
             </content>
         </Tab>
-        <Tab text="Personal details">
+        <Tab onSelectionChanged="#loadPersonalDetails" text="Personal details">
             <content>
-                <GridPane style="-fx-border-color: #000000;fx-border-width: 10;" vgap="20.0">
+                <GridPane hgap="15.0" style="-fx-border-color: #000000;fx-border-width: 10;" vgap="20.0">
                     <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <Label text="First name"/>
-                        <TextField fx:id="firstNameField" disable="true"/>
+                        <Label text="First name" />
+                  <Label fx:id="firstNameLabel" />
                     </VBox>
 
                     <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                        <Label text="Email:"/>
-                        <TextField fx:id="emailField" disable="true"/>
+                        <Label text="Password" />
+                  <Label fx:id="passwordLabel" text="************" />
                     </VBox>
 
                     <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                        <Label text="Address:"/>
-                        <TextField fx:id="addressField" disable="true"/>
+                        <Label text="Address" />
+                  <Label fx:id="addressLabel" />
                     </VBox>
-
-                    <HBox spacing="20" GridPane.rowIndex="5">
-                        <Button fx:id="editButton" onAction="#handleEditButton" text="Edit"/>
-                        <Button fx:id="saveChangesButton" onAction="#showConfirmationDialog" text="Save changes"
-                                visible="false"/>
-                    </HBox>
                     <VBox spacing="10.0" GridPane.rowIndex="4">
                         <children>
-                            <Label text="Telephone number"/>
-                            <TextField fx:id="telephoneNumberField" disable="true"/>
+                            <Label text="Telephone number" />
+                     <Label fx:id="telephoneNumberLabel" />
                         </children>
                     </VBox>
                     <VBox spacing="10.0" GridPane.rowIndex="1">
                         <children>
-                            <Label text="Last name"/>
-                            <TextField fx:id="lastNameField" disable="true"/>
+                            <Label text="Last name" />
+                     <Label fx:id="lastNameLabel" />
                         </children>
                     </VBox>
+
+                    <Button fx:id="editFirstName" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="edit" GridPane.columnIndex="1" />
+                    <Button fx:id="editLastName" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="edit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Button fx:id="editPassword" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="edit" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Button fx:id="editAddress" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="edit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Button fx:id="editTelephoneNumber" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="edit" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#showConfirmationDialog" prefHeight="25.0" prefWidth="149.0" text="Save Changes" GridPane.rowIndex="5" />
+
                     <padding>
-                        <Insets left="10.0" top="10.0"/>
+                        <Insets left="10.0" top="10.0" />
                     </padding>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints halignment="CENTER" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints valignment="BOTTOM" />
+                        <RowConstraints valignment="BOTTOM" />
+                        <RowConstraints valignment="BOTTOM" />
+                        <RowConstraints valignment="BOTTOM" />
+                        <RowConstraints valignment="BOTTOM" />
+                  <RowConstraints valignment="BOTTOM" />
+                    </rowConstraints>
                 </GridPane>
             </content>
         </Tab>
-        <Tab text="Cart">
+        <Tab fx:id="cartTab" onSelectionChanged="#loadCart" text="Cart">
 
             <content>
                 <VBox spacing="10.0">
@@ -112,8 +127,8 @@
 
 
                         </ListView>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="${cartListView.prefWidth}"
-                                text="Buy"/>
+                        <Button fx:id="buyButton" mnemonicParsing="false" onAction="#buy" prefHeight="25.0" prefWidth="${cartListView.prefWidth}" text="Buy" />
+                  <Label fx:id="buySuccessLabel" prefHeight="17.0" prefWidth="308.0" text="Items successfully purchased" textFill="#31c610" visible="false" />
                     </children>
                 </VBox>
 

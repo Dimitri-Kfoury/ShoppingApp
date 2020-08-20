@@ -1,6 +1,8 @@
 package GUI;
 
 
+import Client.ClientSession;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 
 import javafx.fxml.FXML;
@@ -18,13 +20,13 @@ public class CreateAccountPage {
 
     private boolean passwordsMatch = false;
     @FXML
-    private Label passwordMismatchLabel, passwordsMatchLabel, accountCreatedLabel;
+    private Label passwordMismatchLabel, passwordsMatchLabel, accountCreatedLabel,usernameExistsLabel;
     @FXML
     private PasswordField confirmPasswordTextField, passwordTextField;
     @FXML
     private Button submitButton;
     @FXML
-    private TextField usernameField, firstNameField, lastNameField, emailField, addressField, telephoneNumberField;
+    private TextField usernameField, firstNameField, lastNameField, addressField, telephoneNumberField;
 
     @FXML
     public void initialize() {
@@ -39,7 +41,6 @@ public class CreateAccountPage {
         usernameField.textProperty().addListener(accountCreationDetailsChangeListener);
         firstNameField.textProperty().addListener(accountCreationDetailsChangeListener);
         lastNameField.textProperty().addListener(accountCreationDetailsChangeListener);
-        emailField.textProperty().addListener(accountCreationDetailsChangeListener);
         addressField.textProperty().addListener(accountCreationDetailsChangeListener);
         telephoneNumberField.textProperty().addListener(accountCreationDetailsChangeListener);
         passwordTextField.textProperty().addListener(passwordChangListener);
@@ -54,14 +55,13 @@ public class CreateAccountPage {
         String password = passwordTextField.getText();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        String email = emailField.getText();
         String address = addressField.getText();
         String telephoneNumber = telephoneNumberField.getText();
 
 
-      /*  new Thread(() -> {
+        new Thread(() -> {
 
-            boolean accountCreationSuccess = clientOperator.getInstance().createAccount(username, password, firstName, lastName, email, address, telephoneNumber);
+            boolean accountCreationSuccess = ClientSession.getInstance().createAccount(username, password, firstName, lastName, address, telephoneNumber);
 
             if (accountCreationSuccess) {
                 Platform.runLater(() -> {
@@ -70,9 +70,14 @@ public class CreateAccountPage {
                 });
 
             }
+            else {
+
+                usernameExistsLabel.setVisible(true);
+
+            }
 
 
-        }).start();*/
+        }).start();
 
 
     }
@@ -109,7 +114,7 @@ public class CreateAccountPage {
     private void goToLoginPage(String username) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
-        ClientSession.changeScene(600, 600, "Login", loader);
+        GUIMain.getInstance().changeScene(loader,"Login");
         LoginPage loginPageController = loader.getController();
         loginPageController.getTopLabel().setText("Your account has been created !");
         loginPageController.getTopLabel().setTextFill(Color.GREEN);
@@ -122,7 +127,7 @@ public class CreateAccountPage {
     private void enableSubmit() {
 
         if (!usernameField.getText().isEmpty() && passwordsMatch && !firstNameField.getText().isEmpty() && !lastNameField.getText().isEmpty()
-                && !addressField.getText().isEmpty() && !emailField.getText().isEmpty() && !telephoneNumberField.getText().isEmpty())
+                && !addressField.getText().isEmpty() && !telephoneNumberField.getText().isEmpty())
             submitButton.setDisable(false);
         else {
             if (!submitButton.isDisabled())

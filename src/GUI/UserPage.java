@@ -1,30 +1,40 @@
 package GUI;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import org.apache.commons.lang3.StringUtils.*;
 
-import com.dimizios.Product;
+import Client.ClientSession;
+import com.dimizios.CartEntry;
+import com.dimizios.DetailedProduct;
+
 import com.dimizios.PurchaseHistoryEntry;
 import javafx.application.Platform;
 
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+
 import javafx.scene.control.*;
 
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.KeyEvent;
+
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.Optional;
-import java.util.Set;
+
 
 /**
  * @author Dimitri
@@ -32,25 +42,31 @@ import java.util.Set;
 
 public class UserPage {
 
-    @FXML
-    private TextField firstNameField, lastNameField, emailField, addressField, telephoneNumberField;
 
     @FXML
-    private Button editButton, saveChangesButton, addToCartButton;
+    private TextField firstNameField, lastNameField, addressField, telephoneNumberField, quantityField;
+    @FXML
+    private Label addSuccessLabel, firstNameLabel, lastNameLabel, addressLabel, telephoneNumberLabel, buySuccessLabel;
+    @FXML
+    private Button editFirstName, editLastName, editPassword, editAddress, editTelephoneNumber, saveChangesButton, addToCartButton;
     @FXML
     private ImageView rightSideImage;
     @FXML
-    private ListView<Product> productsListView;
+    private ListView<DetailedProduct> productsListView;
 
+    @FXML
+    private ListView<CartEntry> cartListView;
     @FXML
     private ListView<PurchaseHistoryEntry> historyListView;
 
-    private ObservableList<Product> productObservableList;
+    private ObservableList<DetailedProduct> productObservableList;
 
     private ObservableList<PurchaseHistoryEntry> purchaseHistoryEntries;
 
+    private ObservableList<CartEntry> cartEntriesObservableList;
+
     @FXML
-    private TextField bookInfoSearchField;
+    private TextField productSearchField;
 
     @FXML
     private TabPane tabPane;
@@ -59,14 +75,26 @@ public class UserPage {
     public void initialize() {
 
 
+        cartEntriesObservableList = FXCollections.observableArrayList();
+        cartListView.setItems(cartEntriesObservableList);
+
+        purchaseHistoryEntries = FXCollections.observableArrayList();
+        historyListView.setItems(purchaseHistoryEntries);
+        historyListView.setCellFactory(new Callback<ListView<PurchaseHistoryEntry>, ListCell<PurchaseHistoryEntry>>() {
+            @Override
+            public ListCell<PurchaseHistoryEntry> call(ListView<PurchaseHistoryEntry> param) {
+                return new PreviousPurchasesListViewCell();
+            }
+        });
+
         productObservableList = FXCollections.observableArrayList();
         productsListView.setItems(productObservableList);
-        productsListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+        productsListView.setCellFactory(new Callback<ListView<DetailedProduct>, ListCell<DetailedProduct>>() {
             @Override
-            public ListCell<Product> call(ListView<Product> param) {
+            public ListCell<DetailedProduct> call(ListView<DetailedProduct> param) {
 
                 try {
-                    return new ProductListviewCell();
+                    return new DetailedProductListViewCell();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -74,32 +102,48 @@ public class UserPage {
             }
         });
 
-
-        productObservableList.add(new Product(2, "description"));
-        productObservableList.add(new Product(2, "lala"));
-        productObservableList.add(new Product(2, "partymaker 1111111111"));
         purchaseHistoryEntries = FXCollections.observableArrayList();
         historyListView.setItems(purchaseHistoryEntries);
 
-    /*    new Thread(() -> {
-            ObservableList<BookInfo> fetchedBookInfoObservableList = FXCollections.observableArrayList(clientOperator.getInstance().queryBookListByTitle("%"));
-            Platform.runLater(() -> this.productObservableList = fetchedBookInfoObservableList);
-        }).start();
-*/
 
-        /*bookInfoObservableList.add(new BookInfo(3, "12 rules for life",
-                new ArrayList<String>(Arrays.asList("Jordan peterson")), "999000",
-                "Penguin books", new Date(), "Self help"));
-        bookInfoObservableList.add(new BookInfo(3, "Murder in the corner",
-                new ArrayList<String>(Arrays.asList("Dick Jobson")), "999010",
-                "Penguin books", new Date(), "Novel"));
-        bookInfoObservableList.add(new BookInfo(3, "Brothers karamazov",
-                new ArrayList<String>(Arrays.asList("Fyodor Dostoyevsky")), "999002",
-                "Penguin books", new Date(), "Novel"));
-        bookInfoObservableList.add(new BookInfo(3, "Les miserables",
-                new ArrayList<String>(Arrays.asList("Victor Hugo")), "999003",
-                "Penguin books", new Date(), "Novel"));
-        bookInfoListView.getSelectionModel().selectFirst();*/
+        new Thread(() -> {
+            ObservableList<DetailedProduct> fetchedDetailedProductObservableList = FXCollections.observableArrayList(ClientSession.getInstance().search("%"));
+            Platform.runLater(() -> productObservableList.addAll(fetchedDetailedProductObservableList));
+        }).start();
+
+
+    }
+
+    @FXML
+    public void loadPersonalDetails() {
+
+
+        new Thread(() ->
+        {
+
+            String[] personalDetails = ClientSession.getInstance().loadPersonalDetails("muriel");
+            Platform.runLater(() -> {
+
+                firstNameLabel.setText(personalDetails[0]);
+                lastNameLabel.setText(personalDetails[1]);
+                addressLabel.setText(personalDetails[2]);
+                telephoneNumberLabel.setText(personalDetails[3]);
+            });
+
+        }).start();
+
+    }
+
+    @FXML
+    public void loadCart() {
+
+
+        new Thread(() -> {
+
+            Platform.runLater(() -> this.cartEntriesObservableList.setAll(ClientSession.getInstance().loadCart("hey")));
+
+        }).start();
+
 
     }
 
@@ -126,7 +170,7 @@ public class UserPage {
 
         } else {
 
-return;
+            return;
         }
 
     }
@@ -134,34 +178,48 @@ return;
     @FXML
     public void productSearch() {
 
-      /*  new Thread(() -> {
-            ObservableList<BookInfo> fetchedBookInfoObservableList =
-                    FXCollections.observableArrayList(clientOperator.getInstance().queryBookList(bookInfoSearchField.getText()));
-            Platform.runLater(() -> productObservableList = fetchedBookInfoObservableList);
+        new Thread(() -> {
+            ObservableList<DetailedProduct> fetchedDetailedProductObservableList =
+                    FXCollections.observableArrayList(ClientSession.getInstance().search(productSearchField.getText()));
+            Platform.runLater(() -> productObservableList.setAll(fetchedDetailedProductObservableList));
         }).start();
 
-*/
     }
+
 
     @FXML
     public void addToCart() {
-     /*   new Thread(() -> {
 
-            BookInfo bookInfo = productsListView.getSelectionModel().getSelectedItem();
+        new Thread(() -> {
 
-            boolean loanSuccess = clientOperator.getInstance().loanBook(GUIMain.getInstance().getUserAccount().getUsername()
-                    , bookInfo.getIsbn());
 
-            if (loanSuccess) {
-                ObservableList<BookInfo> fetchedBookInfoObservableList =
-                        FXCollections.observableArrayList(clientOperator.getInstance().queryBookList(bookInfoSearchField.getText()));
-                Platform.runLater(() -> productObservableList = fetchedBookInfoObservableList);
+            String productId = productsListView.getSelectionModel().getSelectedItem().getProductId();
+            CartEntry cartEntry = new CartEntry(productId, Integer.parseInt(quantityField.getText()));
 
-            }
+            boolean addSuccess = ClientSession.getInstance().addToCart(cartEntry);
+
+            Platform.runLater(() -> {
+
+
+                if (addSuccess) {
+
+                    addSuccessLabel.setText("Added " + productId + " to cart");
+                    addSuccessLabel.setTextFill(Color.GREEN);
+
+
+                } else {
+
+                    addSuccessLabel.setText("Could not add item to cart");
+                    addSuccessLabel.setTextFill(Color.RED);
+
+                }
+
+                addSuccessLabel.setVisible(true);
+
+            });
 
 
         }).start();
-*/
     }
 
     @FXML
@@ -169,7 +227,6 @@ return;
 
         firstNameField.setDisable(false);
         lastNameField.setDisable(false);
-        emailField.setDisable(false);
         addressField.setDisable(false);
         telephoneNumberField.setDisable(false);
         saveChangesButton.setVisible(true);
@@ -179,60 +236,66 @@ return;
     }
 
     @FXML
-    public void handleSaveChanges() {
+    public void buy() {
 
-        String newFirstName = firstNameField.getText();
-        String newLastName = lastNameField.getText();
-        String newEmail = emailField.getText();
-        String newAddress = addressField.getText();
-        String newTelephoneNumber = telephoneNumberField.getText();
-        editButton.setDisable(true);
-        saveChangesButton.setDisable(true);
+        new Thread(() ->
 
-       /* new Thread(() ->
         {
-            String username = GUIMain.getInstance().getUserAccount().getUsername();
-            boolean updatePersonalInfoSuccess = clientOperator.getInstance().updatePersonalInfo(username,
-                    newFirstName, newLastName, newEmail, newAddress, newTelephoneNumber);
-            if (updatePersonalInfoSuccess) {
-                Account account = clientOperator.getInstance().queryAccount(username);
-                GUIMain.getInstance().setUserAccount(account);
 
-                if (account != null) {
+            boolean purchaseSuccess = ClientSession.getInstance().buy("muriel");
 
-                    Platform.runLater(() -> {
+            if (purchaseSuccess) {
 
-                        firstNameField.setText(newFirstName);
-                        lastNameField.setText(newLastName);
-                        emailField.setText(newEmail);
-                        addressField.setText(newAddress);
-                        telephoneNumberField.setText(newTelephoneNumber);
-                        firstNameField.setDisable(true);
-                        lastNameField.setDisable(true);
-                        emailField.setDisable(true);
-                        addressField.setDisable(true);
-                        telephoneNumberField.setDisable(true);
-                        editButton.setDisable(false);
-                        saveChangesButton.setVisible(false);
 
-                    });
-                }
+                loadCart();
+                Platform.runLater(() -> {
+                    buySuccessLabel.setText("Success");
+                    buySuccessLabel.setTextFill(Color.GREEN);
+
+                    if (!buySuccessLabel.isVisible()) {
+                        buySuccessLabel.setVisible(true);
+                    }
+                });
+            } else {
+
+                Platform.runLater(() -> {
+                    buySuccessLabel.setText("Purchase Operation Failed");
+                    buySuccessLabel.setTextFill(Color.RED);
+                    if (!buySuccessLabel.isVisible()) {
+                        buySuccessLabel.setVisible(true);
+                    }
+                });
+
+
             }
+
+
         }
-        ).start();
-*/
+
+        ).
+
+                start();
+
+
     }
 
-    private class PreviousPurchasesListviewCell extends ListCell<PurchaseHistoryEntry> {
+    @FXML
+    public void handleSaveChanges() {
 
-        public PreviousPurchasesListviewCell() {
 
-        }
+    }
 
-        @Override
-        protected void updateItem(PurchaseHistoryEntry item, boolean empty) {
-            super.updateItem(item, empty);
-        }
+
+    public void loadPurchaseHistory() {
+
+
+        new Thread(() -> {
+            ObservableList<PurchaseHistoryEntry> fetchedPurchaseHistoryObservableList =
+                    FXCollections.observableArrayList(ClientSession.getInstance().getPurchaseHistory("dimizios"));
+            Platform.runLater(() -> purchaseHistoryEntries.setAll(fetchedPurchaseHistoryObservableList));
+        }).start();
+
+
     }
 
     private class CartListViewCell extends ListCell<PurchaseHistoryEntry> {
@@ -244,6 +307,36 @@ return;
         @Override
         protected void updateItem(PurchaseHistoryEntry item, boolean empty) {
             super.updateItem(item, empty);
+        }
+    }
+
+    private class PreviousPurchasesListViewCell extends ListCell<PurchaseHistoryEntry> {
+
+        private Label name = new Label(), purchaseDate = new Label(), quantity = new Label();
+        private HBox hBox = new HBox();
+
+
+        public PreviousPurchasesListViewCell() {
+
+
+            hBox.setSpacing(10);
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.getChildren().addAll(name, purchaseDate, quantity);
+
+        }
+
+        @Override
+        protected void updateItem(PurchaseHistoryEntry item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item != null && !empty) {
+
+                name.setText(item.getProductName());
+//                purchaseDate.setText(item.getPurchaseDate().toString());
+                quantity.setText(" quantity: " + item.getQuantity());
+                setGraphic(hBox);
+
+
+            }
         }
     }
 

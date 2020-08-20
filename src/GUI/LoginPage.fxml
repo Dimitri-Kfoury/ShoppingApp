@@ -4,23 +4,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootVbox" alignment="CENTER" fillWidth="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="rootVbox" alignment="CENTER" fillWidth="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginPage">
    <children>
-      <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Welcome ! Login or create an account"  fx:id="topLabel"/>
-      <GridPane alignment="CENTER" hgap="15.0" vgap="20.0">
+      <Label fx:id="topLabel" alignment="TOP_CENTER" contentDisplay="TOP" text="Welcome ! Login or create an account" />
+      <GridPane alignment="CENTER" hgap="30.0" vgap="30.0">
          <children>
             <Label alignment="CENTER_RIGHT" text="username :" />
             <Label alignment="CENTER_RIGHT" text="password :" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" />
-            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="usernameField" GridPane.columnIndex="1" />
+            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#login" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Don't have an account?" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></Label>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Sign up" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ProgressIndicator maxWidth="-Infinity" prefHeight="40.0" prefWidth="35.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Button fx:id="signUpButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#signUp" text="Sign up" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ProgressIndicator fx:id="loginProgress" maxWidth="-Infinity" prefHeight="40.0" prefWidth="35.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Label fx:id="loginErrorLabel" text="Incorrect username or password" textFill="#d0391f" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
       </GridPane>
    </children>
    <padding>

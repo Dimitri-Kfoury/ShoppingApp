@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.CreateAccountPage">
+<GridPane alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.CreateAccountPage">
          <children>
             <Label fx:id="passwordsMatchLabel" text="Passwords Match" textFill="#5db927" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="passwordMismatchLabel" text="Passwords must match!" textFill="#bf1111" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -38,24 +39,23 @@
                  </children>
              </VBox>
              <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="7.0" GridPane.rowIndex="6">
-                 <children>
-                     <Label text="Email" />
-                     <TextField fx:id="emailField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
-                 </children>
-             </VBox>
-             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="7.0" GridPane.rowIndex="7">
 
                      <Label text="Address" />
                      <TextField fx:id="addressField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
              </VBox>
-             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="7.0" GridPane.rowIndex="8">
+             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="7.0" GridPane.rowIndex="7">
 
                      <Label text="Telephone number" />
                      <TextField fx:id="telephoneNumberField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
              </VBox>
-            <Label fx:id="accountCreatedLabel" text="Account Created!" textFill="#1fbc1d" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <Button fx:id="submitButton" disable="true" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" text="Submit" GridPane.rowIndex="9" />
+            <Label fx:id="accountCreatedLabel" text="Account Created!" textFill="#1fbc1d" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Button fx:id="submitButton" disable="true" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" text="Submit" GridPane.rowIndex="8" />
             <Label text="Enter your details to create a new account." />
+      <Label fx:id="usernameExistsLabel" prefHeight="20.0" prefWidth="135.0" text="Username already exists" textFill="#d31717" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="5.0" />
+         </GridPane.margin>
+      </Label>
          </children>
    <columnConstraints>
       <ColumnConstraints halignment="CENTER" />
@@ -63,7 +63,7 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" />
-      <RowConstraints valignment="TOP" />
+      <RowConstraints valignment="BOTTOM" />
       <RowConstraints />
       <RowConstraints valignment="BOTTOM" />
       <RowConstraints />
@@ -74,4 +74,7 @@
       <RowConstraints />
       <RowConstraints />
    </rowConstraints>
+   <padding>
+      <Insets left="20.0" />
+   </padding>
       </GridPane>

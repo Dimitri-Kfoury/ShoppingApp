@@ -9,22 +9,18 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private int port = 5432;
-    private final int POOL_SIZE = 10;
-    private ExecutorService executorService;
-    protected Map<String,Integer> activeSessions;
+    private static Map<Integer, String> activeSessions;
 
 
-    public Server()
-    {
+    public Server() {
         try {
+            int port = 8888;
             ServerSocket ss = new ServerSocket(port);
-            executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
-                    .availableProcessors() * POOL_SIZE);
+            int POOL_SIZE = 10;
+            ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
             System.out.println("Waiting for client to connect");
 
-            while(true)
-            {
+            while (true) {
                 Socket tcpConn = ss.accept();
                 executorService.execute(new ServerSession(tcpConn));
 
@@ -37,5 +33,14 @@ public class Server {
 
     public static void main(String[] args) {
         new Server();
+    }
+
+    public static void removeActiveSession(Integer sessionId) {
+        activeSessions.remove(sessionId);
+
+    }
+
+    public static Map<Integer, String> getActiveSessions() {
+        return activeSessions;
     }
 }

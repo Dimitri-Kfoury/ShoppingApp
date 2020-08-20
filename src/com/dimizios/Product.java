@@ -1,23 +1,22 @@
 package com.dimizios;
 
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Product {
+public class Product implements Serializable {
 
 
     public Product() {
     }
 
     private String productId;
-    private String productName;
 
 
-    public Product(String productId, String productName) {
+    public Product(String productId) {
         this.productId = productId;
-        this.productName = productName;
 
     }
 
@@ -26,7 +25,4 @@ public class Product {
         return productId;
     }
 
-    public String getProductName() {
-        return productName;
-    }
 }

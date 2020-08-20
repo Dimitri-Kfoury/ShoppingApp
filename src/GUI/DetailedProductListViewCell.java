@@ -1,22 +1,24 @@
 package GUI;
 
-import com.dimizios.Product;
+import com.dimizios.DetailedProduct;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class ProductListviewCell extends ListCell<Product> {
+public class DetailedProductListViewCell extends ListCell<DetailedProduct> {
 
 
     HBox hbox = new HBox();
-    Label label = new Label("hey there");
-    ImageView imageView = new ImageView(new Image(new FileInputStream("Resources/productImages/dogtoy1.jpg")));
+    Label label = new Label();
+    ImageView imageView = new ImageView();
 
-    public ProductListviewCell() throws FileNotFoundException {
+    public DetailedProductListViewCell() throws FileNotFoundException {
 
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);
@@ -28,12 +30,14 @@ public class ProductListviewCell extends ListCell<Product> {
     }
 
     @Override
-    protected void updateItem(Product item, boolean empty) {
+    protected void updateItem(DetailedProduct item, boolean empty) {
         super.updateItem(item, empty);
         setGraphic(null);
         setText(null);
         if (item != null && !empty) {
             label.setText(item.getDescription());
+            byte[] imageBytes = item.getImageBytes();
+            imageView.setImage(new Image(new ByteArrayInputStream(imageBytes)));
             setGraphic(hbox);
         }
     }
